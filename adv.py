@@ -10,8 +10,8 @@ world = World()
 
 
 # You may uncomment the smaller graphs for development and testing purposes.
-map_file = "maps/test_line.txt"
-# map_file = "maps/test_cross.txt"
+# map_file = "maps/test_line.txt"
+map_file = "maps/test_cross.txt"
 # map_file = "maps/test_loop.txt"
 # map_file = "maps/test_loop_fork.txt"
 # map_file = "maps/main_maze.txt"
@@ -34,9 +34,13 @@ def explore(player):
     # create an empty set to track visited rooms
     visited = set()
 
+    # store previous directions (in case we need to back track)
+    backtrack_path = []
+
     # while all the rooms are not yet explored
     while len(visited) < len(world.rooms):
         print(f"traversal path: {traversal_path}")
+        print(f"backtrack path: {backtrack_path}")
 
         # current is the room object we are currently in
         current = player.current_room
@@ -57,7 +61,17 @@ def explore(player):
             direction = unexplored[random.randint(
                 0, len(unexplored)-1)]
             player.travel(direction)
+            backtrack_path.append(direction)
             traversal_path.append(direction)
+
+        # otherwise, we're at a dead end, back track
+        else:
+            # get the last direction we went in
+            last_direction = backtrack_path.pop(-1)
+            # reverse the last direction to go back
+            reverse_direction = {'s': 'n', 'n': 's', 'w': 'e', 'e': 'w'}
+            player.travel(reverse_direction[last_direction])
+            traversal_path.append(reverse_direction[last_direction])
 
     return traversal_path
 
