@@ -11,10 +11,10 @@ world = World()
 
 # You may uncomment the smaller graphs for development and testing purposes.
 # map_file = "maps/test_line.txt"
-map_file = "maps/test_cross.txt"
+# map_file = "maps/test_cross.txt"
 # map_file = "maps/test_loop.txt"
 # map_file = "maps/test_loop_fork.txt"
-# map_file = "maps/main_maze.txt"
+map_file = "maps/main_maze.txt"
 
 # Loads the map into a dictionary
 room_graph = literal_eval(open(map_file, "r").read())
@@ -39,19 +39,13 @@ def explore(player):
 
     # while all the rooms are not yet explored
     while len(visited) < len(world.rooms):
-        print(f"traversal path: {traversal_path}")
-        print(f"backtrack path: {backtrack_path}")
-
         # current is the room object we are currently in
         current = player.current_room
-        print(f"current room: {current.id}")
 
         # unexplored directions from current room
         current_exits = current.get_exits()
         unexplored = [direction for direction in current_exits if current.get_room_in_direction(
             direction) not in visited]
-
-        print(f"unexplored rooms: {unexplored}")
 
         # mark current room as visited
         visited.add(current)
